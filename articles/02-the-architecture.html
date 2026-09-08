@@ -34,11 +34,12 @@
 
   <blockquote>
     Sensitive data — source code, logs, architecture — never leaves the company's network.
-    Only sanitized assessment results are sent to the carrier.
+    The architecture defines a sanitized export boundary for potential later carrier-facing work.
+    No carrier is selected or participating in the non-commercial beta.
   </blockquote>
 
   <p>
-    What actually crosses the boundary to the carrier side is narrow by design: a JSON object
+    What could cross that boundary in a later commercial phase is narrow by design: a JSON object
     with per-vector risk scores, nothing else.
   </p>
 

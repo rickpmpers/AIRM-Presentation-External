@@ -24,6 +24,11 @@
   <h2>Deferred on purpose</h2>
   <ul>
     <li>
+      <strong>No carrier has been selected.</strong> Carrier selection is deferred until the
+      strictly non-commercial beta produces evidence that supports considering a commercial
+      phase. The beta does not involve insurers or any other commercial participant.
+    </li>
+    <li>
       <strong>No actuarial pricing model.</strong> The system produces control-maturity scores,
       not premiums, loss estimates, or compliance certifications. Turning scores into pricing is
       a carrier decision, not something this tool claims to do for them.
@@ -35,9 +40,10 @@
       scoring model is exactly the kind of shortcut that erodes trust the first time it's wrong.
     </li>
     <li>
-      <strong>No multi-tenant carrier backend yet.</strong> The current carrier-side receiver
-      handles the core intake and validation path; multi-tenant support for multiple carriers
-      running independent books of business is on the roadmap, not in the beta.
+      <strong>No production multi-tenant carrier backend.</strong> A development receiver exercises
+      the intake and validation path, but it is not a selected carrier integration. Multi-tenant
+      support and independent books of business belong to a possible later commercial phase, not
+      the beta.
     </li>
     <li>
       <strong>No OAuth/SSO yet.</strong> Auth is functional for a beta but not yet built out for
@@ -65,11 +71,13 @@
 
   <h2>Why the beta is gated</h2>
   <p>
-    This is closed source, and access to the beta is gated behind a short technical
-    application rather than an open signup form. That's not exclusivity for its own sake — the
-    people whose feedback actually moves this forward are the ones already running complex,
-    agent-heavy systems in production and who've had to think hard about exactly the failure
-    modes this system screens for. If you're one of them, the application is on the next page.
+    This is closed source, and access is gated behind a short technical application rather than
+    an open signup form. Beta participation is strictly limited to non-commercial individuals
+    and, where applicable, small personal or community teams operating OpenClaw or comparable
+    personal-agent architectures. Companies, AI-tech firms, insurers, paid enterprise
+    deployments, and all other commercial entities are excluded. "Small personal or community
+    team" has no approved numeric threshold, so borderline cases are reviewed without expanding
+    eligibility. If you fit that boundary, the application is on the next page.
   </p>
 
   <a class="cta" href="../apply.html">Apply for beta access &rarr;</a>
