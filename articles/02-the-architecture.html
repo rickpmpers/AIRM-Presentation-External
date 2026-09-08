@@ -22,25 +22,25 @@
     to make that a non-issue rather than a trust exercise.
   </p>
 
-  <h2>The assessment runs inside your perimeter, not ours</h2>
+  <h2>The beta connects to IC Cloud</h2>
   <p>
-    The assessment ships as a container that runs entirely inside the company being assessed —
-    Docker by default, with a Lambda/Azure Functions path and a standalone binary as
-    alternatives. It reads what it needs locally: code repositories, CI/CD logs, monitoring
-    configuration, documentation. None of that raw material ever leaves the machine it's read
-    on. A local web portal lets the team see exactly what was found, per risk vector, and
-    dispute anything that looks wrong before anything is exported.
+    The non-commercial beta is not offline-only. Every participant connects to IC Cloud. Because
+    evidence sources cannot be predicted in advance, IC Cloud identifies the environment-specific
+    telemetry needs, obtains or installs the requisite packages or connectors, and keeps their
+    execution within IC Cloud. An OpenCloud/Open Cloud telemetry package or another authorized
+    hard-data-user integration can be part of that design. Local files and OpenClaw-native
+    evidence may supplement the assessment, but they are not the sole baseline.
   </p>
 
   <blockquote>
-    Sensitive data — source code, logs, architecture — never leaves the company's network.
-    The architecture defines a sanitized export boundary for potential later carrier-facing work.
-    No carrier is selected or participating in the non-commercial beta.
+    Cloud connectivity is required, but external LLM document handling is not authorized.
+    Telemetry access must be explicit and data-minimized. No carrier is selected or participating
+    in the non-commercial beta, and the scores remain uncalibrated and non-pricing.
   </blockquote>
 
   <p>
-    What could cross that boundary in a later commercial phase is narrow by design: a JSON object
-    with per-vector risk scores, nothing else.
+    The existing scores-only carrier representation remains narrow by design for any possible
+    later commercial phase: a JSON object with per-vector risk scores, not raw evidence.
   </p>
 
   <pre><code>"vectors": {

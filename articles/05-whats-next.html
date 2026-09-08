@@ -50,13 +50,23 @@
       enterprise identity providers.
     </li>
     <li>
-      <strong>No signed connector distribution.</strong> An earlier design considered dynamically
-      fetching compiled connector code at runtime — reviewed and rejected as a security risk
-      (see <a href="04-what-we-learned.html">what we learned</a>). Any future connector
-      distribution model will need real code-signing and publisher verification before it ships,
-      not a checksum alone.
+      <strong>IC Cloud telemetry package controls are still being hardened.</strong> The beta is
+      cloud-connected, and IC Cloud must dynamically obtain or install environment-specific
+      telemetry packages because evidence sources are not known in advance. Those packages and
+      their execution stay within IC Cloud rather than being downloaded to participant devices.
+      Package signing, publisher verification, authorization, isolation, and rollback remain
+      required engineering controls, not reasons to assume an offline-only beta.
     </li>
   </ul>
+
+  <h2>The beta requires IC Cloud</h2>
+  <p>
+    Local files and OpenClaw-native evidence can be useful inputs, but they are not the sole
+    baseline. Each participant must connect to IC Cloud so the service can match telemetry
+    packages or hard-data integrations to the participant's actual environment and run those
+    connectors within IC Cloud. This cloud requirement does not change the ban on external LLM
+    document handling, does not make the scores actuarial, and does not enable pricing.
+  </p>
 
   <h2>Genuinely open gaps, not deferred by choice</h2>
   <ul>

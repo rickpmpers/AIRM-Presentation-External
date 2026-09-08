@@ -79,17 +79,18 @@
       and corrected before it shipped.
     </li>
     <li>
-      <strong>A rejected design.</strong> One planning document described connectors as dynamically
-      fetched, compiled code pulled from the carrier's cloud at runtime. Engineering review
-      rejected it outright: a checksum shipped alongside a payload doesn't independently
-      authenticate its publisher, and the system doesn't execute downloaded code or customer
-      repositories, full stop.
+      <strong>An execution boundary, corrected.</strong> Dynamically downloading connector code
+      onto a participant's device was rejected: a checksum shipped beside a payload does not
+      authenticate its publisher. The beta still requires dynamic telemetry packages because
+      evidence sources are not known in advance, but IC Cloud obtains or installs those packages
+      and keeps their execution within IC Cloud. OpenCloud/Open Cloud and other hard-data-user
+      integrations can fit that model when properly authorized.
     </li>
     <li>
       <strong>A rejected claim.</strong> The planning docs suggested that calls to OpenAI or
       Anthropic APIs "from the container" could still count as staying local. They can't —
-      anything sent to a remote provider has left the perimeter. Governance in the initial build
-      stays offline as a result.
+      anything sent to a remote provider has left the perimeter. The beta connects to IC Cloud,
+      but that requirement does not authorize sending participant documents to an external LLM.
     </li>
     <li>
       <strong>An overclaim, walked back.</strong> "5% risk change triggers automatic premium
