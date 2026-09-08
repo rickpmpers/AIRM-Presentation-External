@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The problem: the AI insurance exclusion wave — AIRM</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="site">
+  <a class="logo" href="../index.html">AIRM</a>
+  <nav><a href="../apply.html">Apply for beta</a></nav>
+</header>
+
+<main class="wrap">
+  <div class="eyebrow">01 &middot; The problem</div>
+  <h1>The AI insurance exclusion wave</h1>
+  <p class="lede">
+    Starting in January 2026, more than sixty P&amp;C carriers began filing explicit AI
+    exclusions into their general liability, E&amp;O, and D&amp;O policies. Three new ISO
+    endorsement forms now exist specifically to carve AI-related claims out of standard
+    coverage. If your company deploys AI in production and something goes wrong, there's a
+    real chance nothing in your current policy stack pays for it.
+  </p>
+
+  <div class="stat-row">
+    <div class="stat"><span class="num">60+</span><span class="label">carriers filing AI exclusions since Jan 2026</span></div>
+    <div class="stat"><span class="num">978%</span><span class="label">rise in AI-related lawsuits, 2021&ndash;2025 (Gallagher)</span></div>
+    <div class="stat"><span class="num">$4.7B</span><span class="label">estimated specialty market opportunity</span></div>
+  </div>
+
+  <p>
+    This isn't a fringe concern from a handful of cautious carriers. It's a structural
+    response to a real spike in claims: incorrect AI-generated outputs used in professional
+    contexts, model behavior that diverges from what was represented to customers or
+    regulators, and liability arising from systems nobody inside the company fully
+    understands anymore. The new ISO forms — CG&nbsp;40&nbsp;47, CG&nbsp;40&nbsp;48, and
+    CG&nbsp;35&nbsp;08 — exist because underwriters need a standard way to say "not this"
+    without rewriting every policy from scratch.
+  </p>
+
+  <h2>The gap underneath the exclusion</h2>
+  <p>
+    Exclusions solve the carrier's problem, not the insured's. Companies that depend on AI
+    internally — for code generation, customer-facing tools, decision support, anything with
+    real operational weight — are left with a widening coverage gap and no systematic way to
+    close it. Specialty and E&amp;S carriers want to fill that gap, because underwriting a
+    genuinely new risk category well, early, is how insurers build durable books of business.
+    But right now they're doing it the same way early cyber insurers did in the mid-2000s:
+    long self-assessment questionnaires, underwriter judgment calls, and very little that
+    resembles evidence.
+  </p>
+
+  <blockquote>
+    AI is at the 2005&ndash;2010 stage now — first-mover advantage exists for whoever builds
+    real assessment tooling first.
+  </blockquote>
+
+  <p>
+    Cyber insurance didn't mature because carriers got better at asking questions. It matured
+    because the industry built tooling that could actually verify what companies claimed —
+    scans, telemetry, audits that replaced self-attestation with evidence. AI liability
+    insurance hasn't had that moment yet. Nobody has published a systematic, technical
+    assessment methodology for it.
+  </p>
+
+  <h2>What "systematic" has to mean here</h2>
+  <p>
+    Not a questionnaire with better wording. A methodology that looks at whether a company has
+    actually implemented and maintained technical defenses against the specific, well-understood
+    ways AI systems fail in production — and that can tell the difference between a control that
+    exists on paper and one that's actually running. That's the premise the rest of this project
+    is built on, and it's the subject of the next two pieces: <a href="02-the-architecture.html">the
+    architecture</a> that keeps the assessment from becoming its own liability, and
+    <a href="03-the-scoring-methodology.html">the scoring methodology</a> that defines what "evidence"
+    actually means.
+  </p>
+
+  <div class="nav-footer">
+    <span></span>
+    <a href="02-the-architecture.html">Next: The architecture &rarr;</a>
+  </div>
+</main>
+<footer class="site">AIRM &middot; closed beta</footer>
+</body>
+</html>

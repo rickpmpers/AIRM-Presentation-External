@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The scoring methodology: 10 vectors, one rule — AIRM</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="site">
+  <a class="logo" href="../index.html">AIRM</a>
+  <nav><a href="../apply.html">Apply for beta</a></nav>
+</header>
+
+<main class="wrap">
+  <div class="eyebrow">03 &middot; The scoring methodology</div>
+  <h1>10 vectors, 5 maturity levels, one rule</h1>
+  <p class="lede">
+    The approach is control-centric, not actuarial: the system doesn't try to predict how
+    likely you are to have a claim. It measures whether you've implemented and maintained
+    technical defenses against ten specific, well-documented ways AI systems fail in
+    production. Stronger controls score lower risk. That's the whole model — no hidden
+    actuarial layer behind it.
+  </p>
+
+  <h2>The ten vectors</h2>
+  <table>
+    <tr><th>Vector</th><th>What it looks for</th></tr>
+    <tr><td>Uncontrolled internet access</td><td>Can the model reach arbitrary external endpoints without gating?</td></tr>
+    <tr><td>Hallucination / OOD behavior</td><td>Confidence and out-of-distribution controls on generated output</td></tr>
+    <tr><td>Model drift</td><td>Monitoring for output/behavior change over time post-deployment</td></tr>
+    <tr><td>Data poisoning</td><td>Controls on training/fine-tuning data provenance and integrity</td></tr>
+    <tr><td>Prompt injection</td><td>Defenses against adversarial or embedded instruction content</td></tr>
+    <tr><td>Model extraction / IP theft</td><td>Rate limiting, auth, and output controls against model theft via querying</td></tr>
+    <tr><td>Bias &amp; disparate impact</td><td>Testing and monitoring for unequal outcomes across groups</td></tr>
+    <tr><td>Vendor concentration</td><td>Dependency risk on a single model provider or API</td></tr>
+    <tr><td>Explainability</td><td>Whether decisions can be traced and justified after the fact</td></tr>
+    <tr><td>Human oversight</td><td>Whether a human is actually in the loop where it matters</td></tr>
+  </table>
+
+  <p>
+    The failure modes behind these aren't abstract. One of the framing examples from the
+    original design work: an LLM generates fabricated case law citations inside a legal
+    research tool, a lawyer files them in a brief, and the result is sanctions or a malpractice
+    claim. That's a hallucination/OOD failure with a direct, traceable liability path — exactly
+    the kind of thing an exclusion clause is written to avoid paying for, and exactly the kind
+    of thing a real control (confidence thresholds, citation verification, human review before
+    filing) can actually prevent.
+  </p>
+
+  <h2>A maturity scale, not a pass/fail</h2>
+  <p>
+    Every vector — plus seven governance dimensions mapped against frameworks like NIST AI RMF,
+    ISO 42001, the EU AI Act, MITRE AIRM, and the OWASP LLM Top 10 — is scored on the same 0&ndash;4
+    scale:
+  </p>
+  <table>
+    <tr><td class="mono">0</td><td>No control</td></tr>
+    <tr><td class="mono">1</td><td>Ad-hoc — exists informally, not systematized</td></tr>
+    <tr><td class="mono">2</td><td>Implemented — exists as a defined process or system</td></tr>
+    <tr><td class="mono">3</td><td>Monitored — implemented and actively observed</td></tr>
+    <tr><td class="mono">4</td><td>Automated — enforced without relying on a human remembering to do it</td></tr>
+  </table>
+
+  <h2>Scanner-first, clarification-second</h2>
+  <p>
+    Scores start from automated evidence: repository scanning, documentation review, CI/CD
+    execution logs, targeted tests. But the system doesn't treat weak surface signals as proof.
+    A file named <code>*hallucination*</code> or <code>*ood*</code> in a test directory is a hint, not a
+    finding — it only counts once the system can cross-reference that the test actually runs in
+    CI, not just that it exists in the repo.
+  </p>
+  <blockquote>
+    A file name, a library import, a prompt instruction, or a configured alert alone does not
+    prove production enforcement, execution frequency, or effectiveness.
+  </blockquote>
+  <p>
+    When the automated pass misses something real, there's a dispute path. If a company can
+    point to evidence the scanner didn't have access to or didn't recognize, the score gets
+    re-evaluated — not on trust, but on the new evidence. A worked example from the original
+    design: the scanner flags model-extraction maturity at 1 (auth only, no rate limiting or
+    output controls visible). The company points out they run differential privacy on outputs,
+    which the scanner isn't positioned to detect from code alone. Once that's confirmed active,
+    the score moves to a 3. The scan doesn't get overridden by an assertion — it gets corrected
+    by evidence.
+  </p>
+
+  <h2>Combining scores without breaking the direction</h2>
+  <p>
+    Technical and governance scores blend into one number using a weighted formula — 40%
+    technical risk, 60% governance — but the two inputs run in opposite directions
+    (governance maturity is scored high-is-good; risk is scored high-is-bad), which is an easy
+    place to get the math backwards. It's also exactly where this project caught itself making
+    that mistake mid-build — more on that, and what else got corrected along the way, in the
+    next piece: <a href="04-what-we-learned.html">what we learned building this across three
+    AI coding tools</a>.
+  </p>
+
+  <div class="nav-footer">
+    <a href="02-the-architecture.html">&larr; Back: The architecture</a>
+    <a href="04-what-we-learned.html">Next: What we learned &rarr;</a>
+  </div>
+</main>
+<footer class="site">AIRM &middot; closed beta</footer>
+</body>
+</html>

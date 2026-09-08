@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What's next, and what we deliberately didn't build — AIRM</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="site">
+  <a class="logo" href="../index.html">AIRM</a>
+  <nav><a href="../apply.html">Apply for beta</a></nav>
+</header>
+
+<main class="wrap">
+  <div class="eyebrow">05 &middot; What's next</div>
+  <h1>What's next, and what we deliberately didn't build</h1>
+  <p class="lede">
+    This is a beta, not a finished product, and the honest version of that sentence matters
+    more than the marketing version. Here's what's actually still open, and — just as
+    important — what we looked at building and chose not to, at least not yet.
+  </p>
+
+  <h2>Deferred on purpose</h2>
+  <ul>
+    <li>
+      <strong>No actuarial pricing model.</strong> The system produces control-maturity scores,
+      not premiums, loss estimates, or compliance certifications. Turning scores into pricing is
+      a carrier decision, not something this tool claims to do for them.
+    </li>
+    <li>
+      <strong>No automatic premium adjustment.</strong> An early design called for a 5%
+      risk-score change to automatically trigger a premium adjustment. That's now an explicitly
+      deferred later milestone, not a v1 feature — automating a financial decision off a young
+      scoring model is exactly the kind of shortcut that erodes trust the first time it's wrong.
+    </li>
+    <li>
+      <strong>No multi-tenant carrier backend yet.</strong> The current carrier-side receiver
+      handles the core intake and validation path; multi-tenant support for multiple carriers
+      running independent books of business is on the roadmap, not in the beta.
+    </li>
+    <li>
+      <strong>No OAuth/SSO yet.</strong> Auth is functional for a beta but not yet built out for
+      enterprise identity providers.
+    </li>
+    <li>
+      <strong>No signed connector distribution.</strong> An earlier design considered dynamically
+      fetching compiled connector code at runtime — reviewed and rejected as a security risk
+      (see <a href="04-what-we-learned.html">what we learned</a>). Any future connector
+      distribution model will need real code-signing and publisher verification before it ships,
+      not a checksum alone.
+    </li>
+  </ul>
+
+  <h2>Genuinely open gaps, not deferred by choice</h2>
+  <ul>
+    <li>Containerization for both the assessment container and the carrier-side receiver is
+      called for in the requirements and not yet complete.</li>
+    <li>Connector test coverage currently relies on fixtures rather than integration testing
+      against live systems (starting with the GitHub connector).</li>
+    <li>No load testing yet against realistic assessment volume.</li>
+    <li>Governance framework label mapping (specifically <code>mitre_airm</code>) needs a
+      clarification pass against the source framework before it's fully trustworthy.</li>
+  </ul>
+
+  <h2>Why the beta is gated</h2>
+  <p>
+    This is closed source, and access to the beta is gated behind a short technical
+    application rather than an open signup form. That's not exclusivity for its own sake — the
+    people whose feedback actually moves this forward are the ones already running complex,
+    agent-heavy systems in production and who've had to think hard about exactly the failure
+    modes this system screens for. If you're one of them, the application is on the next page.
+  </p>
+
+  <a class="cta" href="../apply.html">Apply for beta access &rarr;</a>
+
+  <div class="nav-footer">
+    <a href="04-what-we-learned.html">&larr; Back: What we learned</a>
+    <a href="../index.html">&uarr; Back to overview</a>
+  </div>
+</main>
+<footer class="site">AIRM &middot; closed beta</footer>
+</body>
+</html>

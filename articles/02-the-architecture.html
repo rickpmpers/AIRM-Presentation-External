@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The architecture: a perimeter that actually holds — AIRM</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="site">
+  <a class="logo" href="../index.html">AIRM</a>
+  <nav><a href="../apply.html">Apply for beta</a></nav>
+</header>
+
+<main class="wrap">
+  <div class="eyebrow">02 &middot; The architecture</div>
+  <h1>A perimeter that actually holds</h1>
+  <p class="lede">
+    The hardest part of building a third-party AI risk assessment isn't the scoring — it's
+    that no serious engineering org will let an outside tool see their source code, their
+    logs, or their internal architecture, and they'd be right not to. The architecture exists
+    to make that a non-issue rather than a trust exercise.
+  </p>
+
+  <h2>The assessment runs inside your perimeter, not ours</h2>
+  <p>
+    The assessment ships as a container that runs entirely inside the company being assessed —
+    Docker by default, with a Lambda/Azure Functions path and a standalone binary as
+    alternatives. It reads what it needs locally: code repositories, CI/CD logs, monitoring
+    configuration, documentation. None of that raw material ever leaves the machine it's read
+    on. A local web portal lets the team see exactly what was found, per risk vector, and
+    dispute anything that looks wrong before anything is exported.
+  </p>
+
+  <blockquote>
+    Sensitive data — source code, logs, architecture — never leaves the company's network.
+    Only sanitized assessment results are sent to the carrier.
+  </blockquote>
+
+  <p>
+    What actually crosses the boundary to the carrier side is narrow by design: a JSON object
+    with per-vector risk scores, nothing else.
+  </p>
+
+  <pre><code>"vectors": {
+  "uncontrolled_internet_access": 45,
+  "hallucination_ood": 32,
+  "model_drift": 28
+  &hellip;
+}</code></pre>
+
+  <p>
+    That boundary isn't a policy note in a doc — it's enforced with a regression test that
+    plants a fake secret, a fake internal path, and a fake vendor name in the local evidence
+    store and asserts none of it can appear in the carrier-facing export. The export path is
+    built from an explicit allowlist of fields, not a full internal object with things redacted
+    after the fact. Allowlisting first means there's no field you forgot to strip; there's just
+    a short list of things that are permitted to leave, and everything else structurally can't.
+  </p>
+
+  <h2>Why the scoring logic itself is compiled Go, not a script you can read</h2>
+  <p>
+    There's a second trust boundary running the other direction: the company being assessed
+    generally shouldn't be able to read the exact scoring logic either, for the same reason
+    an exam board doesn't publish the answer key. If a company can read precisely how points
+    are assigned, "passing the assessment" and "actually having the control" stop being the
+    same thing.
+  </p>
+  <p>
+    That's the reason the customer-side container is written in Go rather than Python or
+    Node: Go compiles to a single self-contained binary with no separately readable source,
+    which is difficult to reverse-engineer even with root access to the container. The build
+    pipeline strips debug symbols (<code>-ldflags="-s -w"</code>) and compresses the result with
+    UPX — a base binary that starts around 20MB comes down to roughly 10MB, landing around
+    30&ndash;50MB once connectors and embedded assets are included. The carrier-side backend that
+    aggregates sanitized scores across a whole book of business runs on Python/FastAPI instead,
+    where there's no equivalent need to hide anything from the party running it.
+  </p>
+
+  <h2>Fail-safe direction matters</h2>
+  <p>
+    One deliberate operational choice: if a connector fails, a scan times out, or an assessment
+    can't complete for any reason, the system defaults to the <em>worst-case</em> risk reading
+    for that vector rather than skipping it or defaulting to a neutral score. Insurance pricing
+    isn't real-time, so there's no pressure to guess optimistically when a check didn't actually
+    run — silence about a control's status is treated as evidence of nothing, not evidence of
+    safety.
+  </p>
+  <p>
+    What actually gets measured inside that perimeter — the ten specific things this system
+    checks for, and how a score gets assigned — is the subject of the next piece:
+    <a href="03-the-scoring-methodology.html">the scoring methodology</a>.
+  </p>
+
+  <div class="nav-footer">
+    <a href="01-the-problem.html">&larr; Back: The problem</a>
+    <a href="03-the-scoring-methodology.html">Next: The scoring methodology &rarr;</a>
+  </div>
+</main>
+<footer class="site">AIRM &middot; closed beta</footer>
+</body>
+</html>

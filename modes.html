@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Talk to AIRM — four modes</title>
+<meta name="description" content="Explore AIRM through a live person stream, animated avatar, chat, or static articles.">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="site">
+  <a class="logo" href="index.html">AIRM</a>
+  <nav><a href="index.html">Overview</a><a href="apply.html">Apply for beta</a></nav>
+</header>
+
+<main class="mode-shell">
+  <section class="mode-intro">
+    <div class="eyebrow">Interactive guide · AI assistant</div>
+    <h1>Choose how you want to work through it.</h1>
+    <p class="lede">Start with a question, switch modes whenever you like, and keep the same conversation context. The assistant only discusses the public project material.</p>
+    <p class="lede">We're looking for a handful of beta testers — peers, not companies. If you personally run a "company in a box," a swarm of agents doing real work under your own supervision, this is for you. <a href="apply.html">Apply for beta access →</a></p>
+  </section>
+
+  <div class="mode-switcher" role="tablist" aria-label="Conversation modes">
+    <button class="mode-tab active" data-mode="person" role="tab" aria-selected="true">1 · Live person</button>
+    <button class="mode-tab" data-mode="avatar" role="tab" aria-selected="false">2 · Avatar</button>
+    <button class="mode-tab" data-mode="chat" role="tab" aria-selected="false">3 · Chat bot</button>
+    <button class="mode-tab" data-mode="static" role="tab" aria-selected="false">4 · Static</button>
+  </div>
+
+  <section class="mode-layout">
+    <div class="presence-panel">
+      <div class="presence-topline"><span class="status-dot"></span><span id="presence-label">Live person stream</span><span class="presence-note">AI guide</span></div>
+      <div class="talking-head person-head" data-presence="person" aria-label="Live person video stream placeholder">
+        <div class="stream-placeholder"><span class="stream-icon">◉</span><strong>Live person stream</strong><small>Connect a provider stream to make this a real video conversation.</small></div>
+      </div>
+      <div class="talking-head avatar-head hidden" data-presence="avatar" aria-label="Animated talking avatar">
+        <div class="avatar-glow"></div>
+        <div class="avatar-rig">
+          <div class="avatar-shoulders"></div>
+          <div class="avatar-neck"></div>
+          <div class="avatar-hair"></div>
+          <div class="avatar-face">
+            <span class="avatar-blush left"></span><span class="avatar-blush right"></span>
+            <span class="avatar-eyebrow left"></span><span class="avatar-eyebrow right"></span>
+            <span class="avatar-eye left"><span class="iris"></span><span class="lid"></span></span>
+            <span class="avatar-eye right"><span class="iris"></span><span class="lid"></span></span>
+            <span class="avatar-nose"></span>
+            <div class="avatar-mouth-wrap"><span class="avatar-mouth v-rest" id="avatar-mouth"></span></div>
+          </div>
+        </div>
+        <div class="avatar-label">AIRM guide</div>
+      </div>
+      <div class="talking-head chat-head hidden" data-presence="chat" aria-label="Chat mode">
+        <div class="chat-badge">A</div><strong>Text-first conversation</strong><small>Fast answers with article links.</small>
+      </div>
+      <div class="talking-head static-head hidden" data-presence="static" aria-label="Static article mode">
+        <div class="static-mark">AIRM</div><strong>Read the source material</strong><small>Five short articles, no conversation required.</small>
+      </div>
+      <div class="presence-controls">
+        <button class="control-button" id="speak-toggle" type="button">Speak answer</button>
+        <button class="control-button" id="stop-button" type="button">Stop</button>
+        <button class="control-button" id="mic-button" type="button">Enable live voice</button>
+      </div>
+      <p class="voice-state" id="voice-state">Ready. Microphone stays off until you enable live voice.</p>
+    </div>
+
+    <div class="conversation-panel">
+      <div class="callouts" aria-label="Conversation starters">
+        <button class="callout" data-topic="what"><span>What is this?</span><small>Get the plain-English version</small></button>
+        <button class="callout" data-topic="involved"><span>How can I get involved?</span><small>See the beta path</small></button>
+        <button class="callout" data-topic="needed"><span>Why is this needed?</span><small>Understand the gap</small></button>
+        <button class="callout" data-topic="value"><span>What is the value?</span><small>See who benefits</small></button>
+      </div>
+      <div class="transcript" id="transcript" aria-live="polite">
+        <div class="message assistant"><span class="message-role">AIRM guide</span><p>Choose a question above and I’ll walk you through it. You can type a follow-up or turn on live voice.</p></div>
+      </div>
+      <form class="chat-form" id="chat-form">
+        <label class="sr-only" for="chat-input">Ask a question</label>
+        <input id="chat-input" type="text" autocomplete="off" placeholder="Ask about the project…">
+        <button type="submit">Send</button>
+      </form>
+      <p class="mode-help" id="mode-help">Live person mode is ready for a provider video stream. Until connected, answers still work here.</p>
+    </div>
+  </section>
+
+  <section class="static-links" id="static-links" hidden>
+    <div class="eyebrow">Static mode</div>
+    <h2>Read the project directly</h2>
+    <div class="static-link-grid">
+      <a href="articles/01-the-problem.html">01 · The problem</a><a href="articles/02-the-architecture.html">02 · The architecture</a><a href="articles/03-the-scoring-methodology.html">03 · The scoring methodology</a><a href="articles/04-what-we-learned.html">04 · What we learned</a><a href="articles/05-whats-next.html">05 · What’s next</a>
+    </div>
+  </section>
+</main>
+<script src="assets/modes.js"></script>
+</body>
+</html>

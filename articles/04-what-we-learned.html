@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What we learned building this across three AI coding tools — AIRM</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="site">
+  <a class="logo" href="../index.html">AIRM</a>
+  <nav><a href="../apply.html">Apply for beta</a></nav>
+</header>
+
+<main class="wrap">
+  <div class="eyebrow">04 &middot; What we learned</div>
+  <h1>Building this across three AI coding tools</h1>
+  <p class="lede">
+    The design work for this system happened in one long session, overnight, across roughly
+    ten planning documents. What came after is arguably the more interesting part: the build
+    was deliberately handed between three different AI coding tools in sequence — each one
+    picking up where the last left off, reading not just code but the previous tool's own
+    written record of what it did and why. All eleven original planning documents are preserved
+    verbatim in the repo, specifically so nothing downstream would be working from a lossy
+    summary of the original thinking.
+  </p>
+
+  <h2>Codex: the first working version</h2>
+  <p>
+    Codex took the eleven planning documents and a directory scaffold and built the first real
+    implementation: the Go assessment container and the FastAPI carrier-side receiver. Fast,
+    functional, and — like most first passes translating a night of design thinking into code —
+    carrying forward a few assumptions from the planning docs that hadn't been pressure-tested
+    yet.
+  </p>
+
+  <h2>Claude Code: the bug that would have broken every real submission</h2>
+  <p>
+    The most concrete finding of the whole build came from Claude Code's pass. The carrier-side
+    receiver's strict schema allowlist — the thing that validates every incoming assessment
+    JSON before accepting it — had the hallucination vector spelled <code>"hallucination"</code>.
+    The canonical ID used everywhere else in the scoring logic is <code>"hallucination_ood"</code>.
+  </p>
+  <p>
+    That single mismatch meant every real assessment upload containing that vector would have
+    failed schema validation and been rejected with a 422 — and because no tests existed yet for
+    the receiver, nothing would have caught it before it reached a carrier in production. It's a
+    small diff. It's also exactly the kind of bug that survives code review, survives a demo,
+    and only surfaces the first time real data hits it — which, for an insurance data pipeline,
+    is a bad place to find out.
+  </p>
+  <p>
+    Claude Code fixed the mismatch, added a regression test for it, and added the tests that
+    were missing more broadly: SQLite persistence, the local portal end-to-end path, and —
+    notably — a test that specifically asserts the scores-only export can never leak local
+    evidence, the same boundary described in <a href="02-the-architecture.html">the architecture
+    piece</a>.
+  </p>
+
+  <h2>Reading the planning docs skeptically, not just implementing them</h2>
+  <p>
+    The most valuable output of this phase wasn't new code — it was a document,
+    <code>DECISIONS.md</code>, that reads the original planning material skeptically instead of
+    treating it as ground truth, and records exactly where engineering reality corrected the
+    pitch:
+  </p>
+  <ul>
+    <li>
+      <strong>The score-direction bug.</strong> The planning docs' "40% technical + 60% governance"
+      blend, applied naively, would make <em>stronger</em> governance <em>raise</em> the reported
+      risk score — because governance maturity is scored high-is-good while risk is scored
+      high-is-bad, and a straight weighted average doesn't know that. Fixed formula:
+      <code>combined = 0.4 &times; technical_risk + 0.6 &times; (100 &minus; governance_maturity)</code>.
+    </li>
+    <li>
+      <strong>A second, subtler math error</strong> in the governance-multiplier formula: an inline
+      comment claimed maturity&nbsp;90 produced a multiplier of 0.73, but the formula as written
+      actually produces roughly 0.91 at maturity&nbsp;30 — not what the comment implied. Caught
+      and corrected before it shipped.
+    </li>
+    <li>
+      <strong>A rejected design.</strong> One planning document described connectors as dynamically
+      fetched, compiled code pulled from the carrier's cloud at runtime. Engineering review
+      rejected it outright: a checksum shipped alongside a payload doesn't independently
+      authenticate its publisher, and the system doesn't execute downloaded code or customer
+      repositories, full stop.
+    </li>
+    <li>
+      <strong>A rejected claim.</strong> The planning docs suggested that calls to OpenAI or
+      Anthropic APIs "from the container" could still count as staying local. They can't —
+      anything sent to a remote provider has left the perimeter. Governance in the initial build
+      stays offline as a result.
+    </li>
+    <li>
+      <strong>An overclaim, walked back.</strong> "5% risk change triggers automatic premium
+      adjustment" moved from a v1 feature to an explicitly deferred later milestone — see
+      <a href="05-whats-next.html">what's next</a>.
+    </li>
+    <li>
+      <strong>The framing itself, corrected.</strong> The original pitch leaned on language like
+      "opaque actuarial scoring." The system's own scoring documentation now opens with the
+      opposite claim on purpose:
+    </li>
+  </ul>
+  <blockquote>
+    This is an evidence intake and deterministic screening implementation, not an actuarial
+    model. Scores do not estimate claim frequency, expected loss, premium, legal compliance, or
+    certification.
+  </blockquote>
+
+  <h2>What's next</h2>
+  <p>
+    Google Antigravity (Gemini) is the next tool in the handoff chain, working from the same
+    kind of written record Claude Code left for it. What it's picking up — and what's still
+    honestly unfinished — is the subject of the last piece.
+  </p>
+
+  <div class="nav-footer">
+    <a href="03-the-scoring-methodology.html">&larr; Back: The scoring methodology</a>
+    <a href="05-whats-next.html">Next: What's next &rarr;</a>
+  </div>
+</main>
+<footer class="site">AIRM &middot; closed beta</footer>
+</body>
+</html>
