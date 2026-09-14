@@ -52,10 +52,10 @@
     <li>
       <strong>IC Cloud telemetry package controls are still being hardened.</strong> The beta is
       cloud-connected, and IC Cloud must dynamically obtain or install environment-specific
-      telemetry packages because evidence sources are not known in advance. Those packages and
-      their execution stay within IC Cloud rather than being downloaded to participant devices.
-      Package signing, publisher verification, authorization, isolation, and rollback remain
-      required engineering controls, not reasons to assume an offline-only beta.
+      telemetry packages because evidence sources are not known in advance. IC Cloud distributes
+      the catalog; participants execute only signed, versioned, locally allowlisted packages after
+      explicit authorization. Package signing, isolation, rollback, and approval/update authority
+      remain required engineering controls, not reasons to assume an offline-only beta.
     </li>
   </ul>
 
@@ -63,9 +63,9 @@
   <p>
     Local files and OpenClaw-native evidence can be useful inputs, but they are not the sole
     baseline. Each participant must connect to IC Cloud so the service can match telemetry
-    packages or hard-data integrations to the participant's actual environment and run those
-    connectors within IC Cloud. This cloud requirement does not change the ban on external LLM
-    document handling, does not make the scores actuarial, and does not enable pricing.
+    packages or hard-data integrations to the participant's actual environment. The participant
+    authorizes and executes them locally so raw telemetry remains local; only allowlisted
+    assessment outputs return. This does not authorize external LLM document handling or pricing.
   </p>
 
   <h2>Genuinely open gaps, not deferred by choice</h2>

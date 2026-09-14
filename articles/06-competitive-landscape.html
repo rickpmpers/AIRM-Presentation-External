@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Competitive landscape and the market gap — AIRM</title>
+<meta name="description" content="What already exists in AI risk insurance and where continuous agentic-system assessment may still be missing.">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="site">
+  <a class="logo" href="../index.html">AIRM</a>
+  <nav><a href="../apply.html">Apply for beta</a></nav>
+</header>
+
+<main class="wrap">
+  <div class="eyebrow">06 &middot; Competitive landscape</div>
+  <h1>What already exists, and where the gap may be</h1>
+  <p class="lede">
+    AIRM is not the first project to apply software and insurance thinking to AI risk. The
+    supplied market analysis points to an active ecosystem of specialist MGAs, governance
+    platforms, carriers, and reinsurers. That makes precise positioning more credible than a
+    "world's first" claim.
+  </p>
+
+  <h2>The market is already moving</h2>
+  <p>
+    The competitive field spans several different operating models. Armilla AI is described as
+    a specialist underwriting platform pairing algorithmic risk assessment with performance
+    warranties and affirmative liability coverage. Munich Re's aiSure and Mosaic are positioned
+    around technical due diligence and performance guarantees. Holistic AI represents the AI
+    governance and risk-quantification category, mapping controls to frameworks such as the EU
+    AI Act, NIST AI RMF, and ISO 42001. Traditional cyber and technology E&amp;O carriers still
+    commonly treat AI exposure as an extension of existing cyber or professional-negligence
+    underwriting.
+  </p>
+  <p>
+    These are not interchangeable competitors. Some sell assurance or performance cover, some
+    provide governance and compliance tooling, and some provide underwriting capacity. The
+    important point is that AI risk modeling is already a real market, with real institutions and
+    real commercial use cases.
+  </p>
+
+  <h2>Where current approaches may be thinner</h2>
+  <ul>
+    <li><strong>Agentic systems.</strong> Many models assess a single model or a narrow ML system;
+      fewer describe the risk of multi-agent workflows, tool execution, loops, cascading failures,
+      and dependencies across several model providers.</li>
+    <li><strong>Continuous runtime evidence.</strong> Point-in-time questionnaires and audits can
+      miss prompt drift, nondeterministic behavior, context degradation, and changes introduced by
+      a vendor after deployment.</li>
+    <li><strong>Local evidence boundaries.</strong> A builder needs a way to test controls without
+      exporting source code, raw logs, credentials, or private operating context. A score is only
+      useful if the evidence boundary is explicit and inspectable.</li>
+    <li><strong>Systemic correlation.</strong> A shared foundation-model outage, poisoning event,
+      or provider change can affect many systems at once. The market analysis identifies the lack
+      of a mature catastrophe-style aggregation model for correlated AI loss as an open question.</li>
+    <li><strong>Technical signals to loss language.</strong> Drift, hallucination, alignment, and
+      control signals eventually need a defensible relationship to expected loss, severity, or
+      reserve decisions. That translation is not solved by producing another point score.</li>
+  </ul>
+
+  <h2>AIRM's potential angle</h2>
+  <p>
+    The beta explores a narrower proposition: can a participant run signed, environment-specific
+    telemetry packages inside an aglet container, keep raw evidence and scoring local, and return
+    only allowlisted assessment outputs? The target systems are complex, persistent, multi-agent
+    architectures—not just a single model endpoint.
+  </p>
+  <p>
+    That is a hypothesis, not a market-share claim or an actuarial result. The beta does not set
+    premiums, certify compliance, estimate loss distributions, or select a carrier. It is intended
+    to test whether the evidence boundary and control-screening method are useful enough to support
+    a later commercial or actuarial phase.
+  </p>
+
+  <h2>What this means for the beta</h2>
+  <p>
+    We are looking for individual peer builders who personally operate a company-in-a-box,
+    persistent agent swarm, or comparable multi-surface system. Their practical constraints are
+    the test: what can be measured locally, what must remain private, how failures cascade, and
+    which controls are real rather than merely documented.
+  </p>
+
+  <p class="voice-state">
+    Source: <a href="https://docs.google.com/document/d/1qyUcY-6AR8hPFAjh0c_V_p6BEA5B2948Mw5Ks8dXv4A/edit" rel="noopener">AI Risk Insurance Modeling: Competitive Analysis &amp; Market Gap</a>.
+    This public summary is a working market map, not independent diligence or an endorsement of
+    any named organization.
+  </p>
+
+  <a class="cta" href="../apply.html">Apply for beta access &rarr;</a>
+
+  <div class="nav-footer">
+    <a href="05-whats-next.html">&larr; Back: What's next</a>
+    <a href="../index.html">&uarr; Back to overview</a>
+  </div>
+</main>
+<footer class="site">AIRM &middot; closed beta</footer>
+</body>
+</html>

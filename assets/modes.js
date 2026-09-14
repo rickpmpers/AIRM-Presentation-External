@@ -1,11 +1,11 @@
 const answers = {
   what: { title: 'What is this?', text: 'AIRM is an evidence-based control-screening system for AI production risk. It looks at whether technical and governance controls exist around real failure modes, while keeping raw evidence inside the assessed company’s perimeter.', link: ['Read the architecture', 'articles/02-the-architecture.html'] },
-  involved: { title: 'How can I get involved?', text: 'The beta is strictly non-commercial: eligible participants are individuals and, where applicable, small personal or community teams running OpenClaw or comparable personal-agent systems. Companies, AI-tech firms, insurers, paid enterprise deployments, and other commercial entities are excluded. The beta is cloud-connected: IC Cloud dynamically selects and installs telemetry packages for each environment and keeps their execution within IC Cloud. Local files and OpenClaw-native evidence are not the sole baseline. Carrier selection is deferred until beta evidence supports a later commercial phase.', link: ['Review eligibility and apply', 'apply.html'] },
+  involved: { title: 'How can I get involved?', text: 'The beta is strictly non-commercial: eligible participants are individuals and, where applicable, small personal or community teams running OpenClaw or comparable personal-agent systems. Companies, AI-tech firms, insurers, paid enterprise deployments, and other commercial entities are excluded. IC Cloud dynamically distributes signed telemetry packages for each environment. The participant explicitly authorizes and executes them locally; raw telemetry stays local and only allowlisted assessment outputs return. Carrier selection is deferred until beta evidence supports a later commercial phase.', link: ['Review eligibility and apply', 'apply.html'] },
   needed: { title: 'Why is this needed?', text: 'AI systems are moving into production while underwriting and governance processes still rely heavily on attestations. The project explores a practical assessment layer that can test controls without exporting source code, logs, or infrastructure details.', link: ['Read the problem statement', 'articles/01-the-problem.html'] },
   value: { title: 'What is the value?', text: 'For builders, it creates a structured way to pressure-test systems. For assessors and insurers, it creates a repeatable evidence boundary. The output is a control score and evidence trail, not a claim that the system predicts loss or sets premiums.', link: ['Read the scoring method', 'articles/03-the-scoring-methodology.html'] }
 };
 
-let currentMode = 'person';
+let currentMode = 'static';
 let micStream = null;
 
 const $ = (selector) => document.querySelector(selector);
@@ -124,7 +124,7 @@ function answer(topic) {
   addMessage('user', item.title);
   const html = `${item.text} <a href="${item.link[1]}">${item.link[0]} →</a>`;
   addMessage('assistant', html);
-  if (currentMode !== 'chat' && currentMode !== 'static') speak(item.text);
+  if (currentMode === 'avatar') speak(item.text);
 }
 
 function answerFreeform(question) {
@@ -145,11 +145,11 @@ function selectMode(mode) {
   });
   document.querySelectorAll('[data-presence]').forEach((panel) => panel.classList.toggle('hidden', panel.dataset.presence !== mode));
   $('#static-links').hidden = mode !== 'static';
-  const labels = { person: 'Live person stream', avatar: 'Animated avatar', chat: 'Chat bot', static: 'Static articles' };
-  const help = { person: 'Live person mode is ready for a provider video stream. Until connected, answers still work here.', avatar: 'Avatar mode uses browser speech output and a local animated fallback. Stop interrupts speech and motion together.', chat: 'Chat mode keeps the conversation text-first and works without audio permissions.', static: 'Static mode opens the five project articles directly.' };
+  const labels = { avatar: 'Animated avatar guide', static: 'Static articles' };
+  const help = { avatar: 'Ask a question and the avatar will answer with text and speech. Stop interrupts speech and motion together.', static: 'Static mode shows the five project articles directly.' };
   $('#presence-label').textContent = labels[mode];
   $('#mode-help').textContent = help[mode];
-  $('#speak-toggle').disabled = mode === 'chat' || mode === 'static';
+  $('#speak-toggle').disabled = mode === 'static';
   $('#mic-button').disabled = mode === 'static';
   if (mode === 'static') { window.speechSynthesis?.cancel(); document.body.classList.remove('is-speaking'); stopLipSync(); }
 }
@@ -165,3 +165,5 @@ $('#mic-button').addEventListener('click', async () => {
   try { micStream = await navigator.mediaDevices.getUserMedia({ audio: true }); $('#mic-button').textContent = 'Disable live voice'; voiceState.textContent = 'Live voice is enabled. A realtime speech service will connect here when configured.'; }
   catch { voiceState.textContent = 'Microphone permission was not granted.'; }
 });
+
+selectMode('static');

@@ -82,9 +82,9 @@
       <strong>An execution boundary, corrected.</strong> Dynamically downloading connector code
       onto a participant's device was rejected: a checksum shipped beside a payload does not
       authenticate its publisher. The beta still requires dynamic telemetry packages because
-      evidence sources are not known in advance, but IC Cloud obtains or installs those packages
-      and keeps their execution within IC Cloud. OpenCloud/Open Cloud and other hard-data-user
-      integrations can fit that model when properly authorized.
+      evidence sources are not known in advance. IC Cloud retains and distributes the signed
+      catalog; the participant verifies, explicitly authorizes, and executes the exact package
+      locally. OpenClaw/Open Cloud and other hard-data integrations can fit that model.
     </li>
     <li>
       <strong>A rejected claim.</strong> The planning docs suggested that calls to OpenAI or
