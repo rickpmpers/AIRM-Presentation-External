@@ -14,87 +14,116 @@
 
 <main class="wrap">
   <div class="eyebrow">03 &middot; The scoring methodology</div>
-  <h1>10 vectors, 5 maturity levels, one rule</h1>
+  <h1>10 vectors, multi-framework governance, actuarial loss modeling</h1>
   <p class="lede">
-    The approach is control-centric, not actuarial: the system doesn't try to predict how
-    likely you are to have a claim. It measures whether you've implemented and maintained
-    technical defenses against ten specific, well-documented ways AI systems fail in
-    production. Stronger controls score lower risk. That's the whole model — no hidden
-    actuarial layer behind it.
+    The core approach is control-centric, quantifiable, and transparent: the system measures
+    whether you've implemented and verified technical and governance defenses against specific,
+    well-documented AI failure modes. From this deterministic foundation, an experimental
+    actuarial engine models expected loss distributions and bridges technical evidence into
+    underwriting language.
   </p>
 
-  <h2>The ten vectors</h2>
+  <h2>The ten technical risk vectors</h2>
   <table>
-    <tr><th>Vector</th><th>What it looks for</th></tr>
-    <tr><td>Uncontrolled internet access</td><td>Can the model reach arbitrary external endpoints without gating?</td></tr>
-    <tr><td>Hallucination / OOD behavior</td><td>Confidence and out-of-distribution controls on generated output</td></tr>
-    <tr><td>Model drift</td><td>Monitoring for output/behavior change over time post-deployment</td></tr>
-    <tr><td>Data poisoning</td><td>Controls on training/fine-tuning data provenance and integrity</td></tr>
-    <tr><td>Prompt injection</td><td>Defenses against adversarial or embedded instruction content</td></tr>
-    <tr><td>Model extraction / IP theft</td><td>Rate limiting, auth, and output controls against model theft via querying</td></tr>
-    <tr><td>Bias &amp; disparate impact</td><td>Testing and monitoring for unequal outcomes across groups</td></tr>
-    <tr><td>Vendor concentration</td><td>Dependency risk on a single model provider or API</td></tr>
-    <tr><td>Explainability</td><td>Whether decisions can be traced and justified after the fact</td></tr>
-    <tr><td>Human oversight</td><td>Whether a human is actually in the loop where it matters</td></tr>
+    <tr><th>Vector</th><th>What it evaluates</th></tr>
+    <tr><td>Uncontrolled internet access</td><td>Egress gating, destination allowlisting, and network controls</td></tr>
+    <tr><td>Hallucination / OOD behavior</td><td>Confidence calibration, out-of-distribution detection, citation checks</td></tr>
+    <tr><td>Model drift</td><td>Continuous distribution shift monitoring on production outputs</td></tr>
+    <tr><td>Data poisoning</td><td>Provenance, hashing, and pipeline integrity for training/fine-tuning data</td></tr>
+    <tr><td>Prompt injection</td><td>Structural isolation of untrusted input and contextual delimiter enforcement</td></tr>
+    <tr><td>Model extraction / IP theft</td><td>Rate limiting, authentication, query pattern analysis, and differential privacy</td></tr>
+    <tr><td>Bias &amp; disparate impact</td><td>Statistical fairness testing and demographic parity across model decisions</td></tr>
+    <tr><td>Vendor concentration</td><td>Multi-provider fallback, schema decoupling, and dependency risk</td></tr>
+    <tr><td>Explainability</td><td>Traceability, decision rationale reconstruction, and feature attribution</td></tr>
+    <tr><td>Human oversight</td><td>Meaningful human-in-the-loop escalation, approval gates, and override safety</td></tr>
   </table>
 
+  <h2>A five-level maturity scale</h2>
   <p>
-    The failure modes behind these aren't abstract. One of the framing examples from the
-    original design work: an LLM generates fabricated case law citations inside a legal
-    research tool, a lawyer files them in a brief, and the result is sanctions or a malpractice
-    claim. That's a hallucination/OOD failure with a direct, traceable liability path — exactly
-    the kind of thing an exclusion clause is written to avoid paying for, and exactly the kind
-    of thing a real control (confidence thresholds, citation verification, human review before
-    filing) can actually prevent.
-  </p>
-
-  <h2>A maturity scale, not a pass/fail</h2>
-  <p>
-    Every vector — plus seven governance dimensions mapped against frameworks like NIST AI RMF,
-    ISO 42001, the EU AI Act, MITRE ATLAS, and the OWASP LLM Top 10 — is scored on the same 0&ndash;4
-    scale:
+    Every technical vector and governance control is evaluated on a standardized 0&ndash;4 maturity scale:
   </p>
   <table>
-    <tr><td class="mono">0</td><td>No control</td></tr>
-    <tr><td class="mono">1</td><td>Ad-hoc — exists informally, not systematized</td></tr>
-    <tr><td class="mono">2</td><td>Implemented — exists as a defined process or system</td></tr>
-    <tr><td class="mono">3</td><td>Monitored — implemented and actively observed</td></tr>
-    <tr><td class="mono">4</td><td>Automated — enforced without relying on a human remembering to do it</td></tr>
+    <tr><td class="mono">0</td><td><strong>No control:</strong> Missing entirely or undocumented.</td></tr>
+    <tr><td class="mono">1</td><td><strong>Ad-hoc:</strong> Informally implemented, inconsistent, or undocumented.</td></tr>
+    <tr><td class="mono">2</td><td><strong>Implemented:</strong> Defined, documented, and consistently functioning.</td></tr>
+    <tr><td class="mono">3</td><td><strong>Monitored:</strong> Implemented and continuously observed with real telemetry.</td></tr>
+    <tr><td class="mono">4</td><td><strong>Automated:</strong> Programmatically enforced, self-healing, or circuit-broken without human dependency.</td></tr>
   </table>
 
-  <h2>Scanner-first, clarification-second</h2>
+  <h2>Expanded governance-first standards catalog</h2>
   <p>
-    Scores start from automated evidence: repository scanning, documentation review, CI/CD
-    execution logs, targeted tests. But the system doesn't treat weak surface signals as proof.
-    A file named <code>*hallucination*</code> or <code>*ood*</code> in a test directory is a hint, not a
-    finding — it only counts once the system can cross-reference that the test actually runs in
-    CI, not just that it exists in the repo.
+    AIRM maps control objectives against comprehensive international AI standards and frameworks:
+  </p>
+  <ul>
+    <li><strong>NIST AI RMF 1.0 &amp; Generative AI Profile (NIST AI 600-1):</strong> GOVERN, MAP, MEASURE, and MANAGE functions, including CBRN prevention, system prompt leakage, and embedding defenses.</li>
+    <li><strong>ISO/IEC 42001 (AIMS):</strong> Formal AI management system policies, resource allocation, and organizational governance.</li>
+    <li><strong>ISO/IEC 42005:</strong> AI system impact assessment methodology.</li>
+    <li><strong>ISO/IEC 23894:</strong> AI risk management guidance and operational risk taxonomy.</li>
+    <li><strong>OWASP LLM Top 10 (2025 Edition):</strong> Covers excessive agency, prompt injection, vector database weaknesses, unbounded consumption, and supply chain vulnerabilities.</li>
+    <li><strong>MITRE ATLAS:</strong> Qualitative mapping to AI threat tactics and adversary techniques.</li>
+    <li><strong>EU AI Act &amp; NAIC Model Bulletin:</strong> High-risk classification controls and unfair discrimination governance.</li>
+  </ul>
+
+  <h2>Normalized open-source tool evidence adapters</h2>
+  <p>
+    AIRM bridges real evaluation tools directly into the governance evidence store through normalized
+    adapters. Supported frameworks include:
+  </p>
+  <div class="stat-row">
+    <div class="stat"><span class="num">Promptfoo</span><span class="label">Prompt Injection &amp; Red-Teaming</span></div>
+    <div class="stat"><span class="num">DeepEval &amp; Giskard</span><span class="label">Hallucination &amp; OOD Robustness</span></div>
+    <div class="stat"><span class="num">ART, AIF360, Evidently</span><span class="label">Evasion, Fairness &amp; Drift</span></div>
+  </div>
+  <p>
+    Every tool output is normalized into an <code>api.Evidence</code> record with a canonical
+    <code>tool://</code> URI, runtime parameters, tool version, and execution timestamp.
   </p>
   <blockquote>
-    A file name, a library import, a prompt instruction, or a configured alert alone does not
-    prove production enforcement, execution frequency, or effectiveness.
+    <strong>The human-review invariant:</strong> An automated tool run generates diagnostic
+    evidence with maturity explicitly left unassigned (<code>nil</code>). A tool run alone never
+    grants a maturity score or establishes compliance; an authorized human reviewer must inspect
+    the output and set the verified maturity.
   </blockquote>
+
+  <h2>Offensive-testing program schema</h2>
   <p>
-    When the automated pass misses something real, there's a dispute path. If a company can
-    point to evidence the scanner didn't have access to or didn't recognize, the score gets
-    re-evaluated — not on trust, but on the new evidence. A worked example from the original
-    design: the scanner flags model-extraction maturity at 1 (auth only, no rate limiting or
-    output controls visible). The company points out they run differential privacy on outputs,
-    which the scanner isn't positioned to detect from code alone. Once that's confirmed active,
-    the score moves to a 3. The scan doesn't get overridden by an assertion — it gets corrected
-    by evidence.
+    Adversarial evaluation is treated as formal governance evidence, not an ad-hoc penetration demo.
+    AIRM enforces a validated three-phase lifecycle across ten attack families:
+  </p>
+  <ol>
+    <li><strong>TestGate:</strong> Formal pre-execution authorization, attack family classification, and scope boundaries.</li>
+    <li><strong>TestFinding:</strong> Empirical execution record documenting toolchain, payload, exploitability, and impact.</li>
+    <li><strong>TestDisposition:</strong> Post-execution remediation record, tracking re-test verification and sign-off.</li>
+  </ol>
+  <p>
+    Under schema validation rules, a test cannot be recorded as executed without a gate, and cannot
+    be marked closed while an outstanding remediation retest remains unapproved.
   </p>
 
-  <h2>Combining scores without breaking the direction</h2>
+  <h2>Actuarial loss modeling &amp; 75/25 AI-exclusion blend</h2>
   <p>
-    Technical and governance scores blend into one number using a weighted formula — 40%
-    technical risk, 60% governance — but the two inputs run in opposite directions
-    (governance maturity is scored high-is-good; risk is scored high-is-bad), which is an easy
-    place to get the math backwards. It's also exactly where this project caught itself making
-    that mistake mid-build — more on that, and what else got corrected along the way, in the
-    next piece: <a href="04-what-we-learned.html">what we learned building this across three
-    AI coding tools</a>.
+    To solve the insurance exclusion gap, AIRM provides an isolated actuarial engine in the
+    <code>pricing/</code> package that converts technical risk scores into financial loss language:
   </p>
+  <ul>
+    <li>
+      <strong>FAIR Monte Carlo Simulation:</strong> Uses compound-Poisson frequency (Loss Event
+      Frequency) and lognormal severity (Loss Magnitude) to simulate annual loss distributions,
+      calculating Expected Annual Loss (EAL), Value at Risk (VaR 95% and 99.5%), and Tail Value at
+      Risk (TVaR 99.5%).
+    </li>
+    <li>
+      <strong>75/25 AI-Exclusion Blend:</strong> Blends the AI-specific loss indication with
+      underlying business class pure premiums using public benchmark observations:
+      <pre><code>Blended Pure Premium = 0.75 * AI Expected Annual Loss + 0.25 * Underlying Class Pure Premium</code></pre>
+      followed by an explicit expense/profit loading factor.
+    </li>
+    <li>
+      <strong>Public Proxy Class Table:</strong> Calibrated against Coalition 2024 sector claim
+      frequencies and severities across ten commercial sectors (healthcare, financial, retail,
+      tech, etc.) with transparent non-ISO provenance disclosures.
+    </li>
+  </ul>
 
   <div class="nav-footer">
     <a href="02-the-architecture.html">&larr; Back: The architecture</a>

@@ -18,79 +18,140 @@
   <p class="lede">
     The hardest part of building a third-party AI risk assessment isn't the scoring — it's
     that no serious engineering org will let an outside tool see their source code, their
-    logs, or their internal architecture, and they'd be right not to. The architecture exists
-    to make that a non-issue rather than a trust exercise.
+    cloud credentials, or their internal architecture. AIRM is architected so that raw data,
+    proprietary architecture, and credentials never cross the company perimeter, while still
+    enabling continuous, verified telemetry underwriting.
   </p>
 
-  <h2>The beta connects to IC Cloud</h2>
+  <h2>The two execution boundaries</h2>
   <p>
-    The non-commercial beta is not offline-only. Every participant connects to IC Cloud. Because
-    evidence sources cannot be predicted in advance, IC Cloud identifies the environment-specific
-    telemetry needs and delivers a signed, versioned package from its retained catalog. The
-    participant verifies, explicitly authorizes, and executes that package locally. OpenClaw/Open
-    Cloud or another hard-data integration can be part of the catalog. Raw telemetry, credentials,
-    and sensitive evidence stay local; only allowlisted assessment outputs may return to IC Cloud.
+    AIRM operates across two strictly isolated boundaries:
   </p>
+  <ul>
+    <li>
+      <strong>The Company Assessment Container (Aglet Container):</strong> Deployed inside the
+      customer's infrastructure (Docker, local workstation, or cloud VPC). It ingests system
+      architecture specifications, requests and cryptographically verifies environment-specific
+      telemetry packages, runs collectors locally using in-memory credentials, screens controls,
+      and maintains a local SQLite audit trail.
+    </li>
+    <li>
+      <strong>The Carrier Central Authority (IC Cloud):</strong> Acts as the package synthesis
+      authority and underwriting receiver. It dynamically synthesizes custom telemetry packages,
+      signs them cryptographically, and receives <em>only</em> allowlisted, sanitized risk scores
+      to calculate dynamic premium adjustments.
+    </li>
+  </ul>
 
-  <blockquote>
-    Cloud connectivity is required, but external LLM document handling is not authorized.
-    Telemetry access must be explicit and data-minimized. No carrier is selected or participating
-    in the non-commercial beta, and the scores remain uncalibrated and non-pricing.
-  </blockquote>
-
+  <h2>1. Multi-format architecture intake</h2>
   <p>
-    The existing scores-only carrier representation remains narrow by design for any possible
-    later commercial phase: a JSON object with per-vector risk scores, not raw evidence.
+    Before an assessment runs, the container must understand what systems exist. AIRM includes
+    a pure standard-library document intake engine that parses ten distinct formats without
+    relying on heavy third-party services or external LLM APIs:
+  </p>
+  <div class="stat-row">
+    <div class="stat"><span class="num">10</span><span class="label">Supported Document Formats</span></div>
+    <div class="stat"><span class="num">0</span><span class="label">External API / LLM Calls</span></div>
+    <div class="stat"><span class="num">100%</span><span class="label">Local In-Container Parsing</span></div>
+  </div>
+  <p>
+    Supported inputs include <code>.docx</code>, <code>.xlsx</code>, <code>.csv</code>,
+    <code>.drawio / .xml</code> diagrams, <code>.mermaid / .mmd</code> flowcharts, <code>.pdf</code>,
+    <code>.txt</code>, <code>.md</code>, <code>.json</code>, and <code>.yaml</code>.
+    The AST/text analyzer detects cloud and AI building blocks—such as Amazon Bedrock, Amazon
+    SageMaker, AWS Lambda, Amazon S3, Vector Databases, and API Gateways—and maps each component
+    directly to corresponding risk vectors and required telemetry packages.
   </p>
 
-  <pre><code>"vectors": {
-  "uncontrolled_internet_access": 45,
-  "hallucination_ood": 32,
-  "model_drift": 28
-  &hellip;
+  <h2>2. Dynamic package synthesis &amp; HMAC-SHA256 code signing</h2>
+  <p>
+    Because production environments differ wildly, pre-baking every possible monitoring agent into
+    the customer container would bloat the deployment and create attack surface. Instead, IC Cloud
+    dynamically synthesizes tailored telemetry packages based on the detected architecture and
+    engineer directives.
+  </p>
+  <p>
+    To protect the client container from malicious or tampered code downloads, every package bundle
+    synthesized by IC Cloud includes an immutable <code>SignatureBlock</code> containing an
+    <strong>HMAC-SHA256 digest</strong> calculated over the canonical JSON manifest. Before the
+    local container touches or stages any package, it verifies the signature bit-for-bit against
+    the trusted authority key. If the signature doesn't match or the authority is unverified,
+    the package is immediately rejected.
+  </p>
+
+  <h2>3. Local in-memory credentials &amp; zero credential egress</h2>
+  <p>
+    Telemetry collectors (e.g. AWS CloudWatch, Datadog) require credentials. In AIRM, those
+    credentials (e.g. <code>AWS_ACCESS_KEY_ID</code>, <code>AWS_SECRET_ACCESS_KEY</code>) are passed
+    directly to the local container and held <strong>strictly in volatile process memory</strong>.
+    They are never written to disk, never included in logs, and structurally cannot cross the
+    network boundary to IC Cloud.
+  </p>
+
+  <h2>4. The score-only carrier export boundary</h2>
+  <p>
+    The carrier receiver accepts only a strictly allowlisted payload:
+  </p>
+  <pre><code>{
+  "schema_version": "v1.0",
+  "assessment_id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
+  "company_id": "company-a",
+  "combined_risk_score": 38.5,
+  "technical_scores": {
+    "uncontrolled_internet_access": 45,
+    "hallucination_ood": 32,
+    "model_drift": 28,
+    "prompt_injection": 22
+  },
+  "governance_scores": {
+    "nist_ai_rmf": 68,
+    "iso_42001": 74,
+    "owasp_llm_top_10": 80
+  }
 }</code></pre>
-
   <p>
-    That boundary isn't a policy note in a doc — it's enforced with a regression test that
-    plants a fake secret, a fake internal path, and a fake vendor name in the local evidence
-    store and asserts none of it can appear in the carrier-facing export. The export path is
-    built from an explicit allowlist of fields, not a full internal object with things redacted
-    after the fact. Allowlisting first means there's no field you forgot to strip; there's just
-    a short list of things that are permitted to leave, and everything else structurally can't.
+    A dedicated regression test plants synthetic secrets, local file paths, internal reviewer
+    names, and stderr diagnostics into the local store and asserts that none can appear in the
+    carrier payload. Allowlisting first means there's no field you forgot to sanitize; only
+    uncalibrated numeric scores and framework metadata are permitted to leave.
   </p>
 
-  <h2>Why the scoring logic itself is compiled Go, not a script you can read</h2>
+  <h2>5. Closed-loop underwriting rate adjustment</h2>
   <p>
-    There's a second trust boundary running the other direction: the company being assessed
-    generally shouldn't be able to read the exact scoring logic either, for the same reason
-    an exam board doesn't publish the answer key. If a company can read precisely how points
-    are assigned, "passing the assessment" and "actually having the control" stop being the
-    same thing.
+    AIRM proves the complete closed loop from architecture intake to policyholder rate adjustment:
+  </p>
+  <ol>
+    <li>Architecture document uploaded and parsed locally into component specifications.</li>
+    <li>Container requests dynamic telemetry packages with optional engineer directives.</li>
+    <li>IC Cloud synthesizes and cryptographically signs packages with HMAC-SHA256 digests.</li>
+    <li>Container verifies signatures bit-for-bit and prompts for customer authorization.</li>
+    <li>Container executes verified collector locally using in-memory AWS credentials.</li>
+    <li>Control screening completes and exports sanitized scores to IC Cloud.</li>
+    <li>IC Cloud receives the score, compares it to historical baseline submissions, and computes
+      a dynamic underwriting rate adjustment (e.g. <code>-2.5% premium adjustment</code>).</li>
+  </ol>
+
+  <h2>6. Multi-tenant IC Cloud &amp; carrier white-label distribution</h2>
+  <p>
+    IC Cloud provides true multi-tenant isolation: a per-tenant SQLite registry enforces independent
+    token digests, signing keys, and assessment records. It features a rate-limited administration
+    surface (<code>/admin/api/*</code> and web UI at <code>/admin</code>) protected by sliding-window
+    rate limiters and automatic lockout mechanisms.
   </p>
   <p>
-    That's the reason the customer-side container is written in Go rather than Python or
-    Node: Go compiles to a single self-contained binary with no separately readable source,
-    which is difficult to reverse-engineer even with root access to the container. The build
-    pipeline strips debug symbols (<code>-ldflags="-s -w"</code>) and compresses the result with
-    UPX — a base binary that starts around 20MB comes down to roughly 10MB, landing around
-    30&ndash;50MB once connectors and embedded assets are included. The carrier-side backend that
-    aggregates sanitized scores across a whole book of business runs on Python/FastAPI instead,
-    where there's no equivalent need to hide anything from the party running it.
+    Furthermore, under <strong>Decision 16</strong>, the customer-facing container includes a
+    configurable white-label branding layer (<code>config.BrandingConfig</code>, exposed via
+    <code>GET /api/branding</code>). This allows insurance carriers to distribute the verified
+    assessment container directly to their policyholders under the carrier's own product name,
+    logo, and theme—without modifying the underlying cryptographic, scoring, or privacy boundaries.
   </p>
 
-  <h2>Fail-safe direction matters</h2>
+  <h2>Fail-safe direction: missing evidence stays unknown</h2>
   <p>
-    One deliberate operational choice: if a connector fails, a scan times out, or an assessment
-    can't complete for any reason, the system defaults to the <em>worst-case</em> risk reading
-    for that vector rather than skipping it or defaulting to a neutral score. Insurance pricing
-    isn't real-time, so there's no pressure to guess optimistically when a check didn't actually
-    run — silence about a control's status is treated as evidence of nothing, not evidence of
-    safety.
-  </p>
-  <p>
-    What actually gets measured inside that perimeter — the ten specific things this system
-    checks for, and how a score gets assigned — is the subject of the next piece:
-    <a href="03-the-scoring-methodology.html">the scoring methodology</a>.
+    If a connector is unconfigured or a scan fails, the system does not invent a passing score or
+    fabricate a midpoint. Missing evidence is explicitly classified as <em>unknown</em>, lowering
+    overall assessment coverage. In insurance and risk modeling, silence is evidence of absence,
+    not evidence of safety.
   </p>
 
   <div class="nav-footer">

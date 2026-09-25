@@ -16,105 +16,108 @@
   <div class="eyebrow">04 &middot; What we learned</div>
   <h1>Building this across three AI coding tools</h1>
   <p class="lede">
-    The design work for this system happened in one long session, overnight, across roughly
-    ten planning documents. What came after is arguably the more interesting part: the build
-    was deliberately handed between three different AI coding tools in sequence — each one
-    picking up where the last left off, reading not just code but the previous tool's own
-    written record of what it did and why. All eleven original planning documents are preserved
-    verbatim in the repo, specifically so nothing downstream would be working from a lossy
-    summary of the original thinking.
+    The architecture for AIRM was designed across eleven source planning documents. What came
+    after was a deliberate exercise in multi-agent engineering continuity: the build was handed
+    sequentially between three distinct AI coding environments—Codex, Claude Code, and Google
+    Antigravity (Gemini)—each reading the previous agent's written record, challenging
+    assumptions, and building forward to complete the product.
   </p>
 
-  <h2>Codex: the first working version</h2>
+  <h2>1. Codex: the initial MVP and domain model</h2>
   <p>
-    Codex took the eleven planning documents and a directory scaffold and built the first real
-    implementation: the Go assessment container and the FastAPI carrier-side receiver. Fast,
-    functional, and — like most first passes translating a night of design thinking into code —
-    carrying forward a few assumptions from the planning docs that hadn't been pressure-tested
-    yet.
+    Codex took the initial planning documents and built the first operational version: the Go
+    assessment container domain model, the evaluation catalog, and the FastAPI carrier receiver.
+    It established the foundational separation between local assessment and carrier export,
+    though it carried forward early design assumptions that had not yet been tested against
+    adversarial boundaries.
   </p>
 
-  <h2>Claude Code: the bug that would have broken every real submission</h2>
+  <h2>2. Claude Code: catching the silent integration bug</h2>
   <p>
-    The most concrete finding of the whole build came from Claude Code's pass. The carrier-side
-    receiver's strict schema allowlist — the thing that validates every incoming assessment
-    JSON before accepting it — had the hallucination vector spelled <code>"hallucination"</code>.
-    The canonical ID used everywhere else in the scoring logic is <code>"hallucination_ood"</code>.
+    Claude Code took over the repository and subjected it to rigorous integration testing. The
+    most critical discovery of this phase was a silent schema bug: the carrier receiver's Pydantic
+    allowlist had the hallucination vector spelled <code>"hallucination"</code> instead of the
+    canonical <code>"hallucination_ood"</code>. Because no receiver tests existed, every real carrier
+    upload would have failed schema validation with an HTTP 422.
   </p>
   <p>
-    That single mismatch meant every real assessment upload containing that vector would have
-    failed schema validation and been rejected with a 422 — and because no tests existed yet for
-    the receiver, nothing would have caught it before it reached a carrier in production. It's a
-    small diff. It's also exactly the kind of bug that survives code review, survives a demo,
-    and only surfaces the first time real data hits it — which, for an insurance data pipeline,
-    is a bad place to find out.
-  </p>
-  <p>
-    Claude Code fixed the mismatch, added a regression test for it, and added the tests that
-    were missing more broadly: SQLite persistence, the local portal end-to-end path, and —
-    notably — a test that specifically asserts the scores-only export can never leak local
-    evidence, the same boundary described in <a href="02-the-architecture.html">the architecture
-    piece</a>.
+    Claude Code fixed the mismatch, added a 17-test receiver suite, built SQLite persistence
+    and audit log tests, created portal end-to-end tests, and added the planted-secret leakage
+    regression test verifying that proprietary evidence cannot cross to the carrier. It also
+    crystallized <code>docs/DECISIONS.md</code>, correcting math direction errors (inverting
+    governance maturity before risk blending) and documenting architectural constraints.
   </p>
 
-  <h2>Reading the planning docs skeptically, not just implementing them</h2>
+  <h2>3. Google Antigravity (Gemini): completing the product &amp; proving the loop</h2>
   <p>
-    The most valuable output of this phase wasn't new code — it was a document,
-    <code>DECISIONS.md</code>, that reads the original planning material skeptically instead of
-    treating it as ground truth, and records exactly where engineering reality corrected the
-    pitch:
+    Google Antigravity took the tested foundation and engineered the complete feature set:
   </p>
   <ul>
     <li>
-      <strong>The score-direction bug.</strong> The planning docs' "40% technical + 60% governance"
-      blend, applied naively, would make <em>stronger</em> governance <em>raise</em> the reported
-      risk score — because governance maturity is scored high-is-good while risk is scored
-      high-is-bad, and a straight weighted average doesn't know that. Fixed formula:
-      <code>combined = 0.4 &times; technical_risk + 0.6 &times; (100 &minus; governance_maturity)</code>.
+      <strong>Multi-Format Architecture Intake:</strong> Built a pure Go standard-library parser
+      for ten document formats (<code>.docx</code>, <code>.xlsx</code>, <code>.csv</code>,
+      <code>.drawio</code>, <code>.mermaid</code>, <code>.pdf</code>, etc.) with AST component
+      detection, eliminating external LLM or cloud API dependencies.
     </li>
     <li>
-      <strong>A second, subtler math error</strong> in the governance-multiplier formula: an inline
-      comment claimed maturity&nbsp;90 produced a multiplier of 0.73, but the formula as written
-      actually produces roughly 0.91 at maturity&nbsp;30 — not what the comment implied. Caught
-      and corrected before it shipped.
+      <strong>Cryptographic Supply Chain Integrity:</strong> Designed and implemented dynamic
+      package synthesis with HMAC-SHA256 signature blocks (<code>SignatureBlock</code>) and bit-for-bit
+      client verification in Go (<code>VerifySignature</code>).
     </li>
     <li>
-      <strong>An execution boundary, corrected.</strong> Dynamically downloading connector code
-      onto a participant's device was rejected: a checksum shipped beside a payload does not
-      authenticate its publisher. The beta still requires dynamic telemetry packages because
-      evidence sources are not known in advance. IC Cloud retains and distributes the signed
-      catalog; the participant verifies, explicitly authorizes, and executes the exact package
-      locally. OpenClaw/Open Cloud and other hard-data integrations can fit that model.
+      <strong>Closed-Loop Telemetry &amp; Underwriting:</strong> Wired AWS CloudWatch metrics with
+      in-memory credential containment, connected score-only exports to the carrier, and proved the
+      complete automated loop resulting in dynamic underwriting rate adjustments.
     </li>
     <li>
-      <strong>A rejected claim.</strong> The planning docs suggested that calls to OpenAI or
-      Anthropic APIs "from the container" could still count as staying local. They can't —
-      anything sent to a remote provider has left the perimeter. The beta connects to IC Cloud,
-      but that requirement does not authorize sending participant documents to an external LLM.
+      <strong>Containerization &amp; Security Hardening:</strong> Built production multi-stage
+      Dockerfiles with unprivileged users, automated self-signed TLS/mTLS certificate generation,
+      and secure multi-container compose specifications.
     </li>
     <li>
-      <strong>An overclaim, walked back.</strong> "5% risk change triggers automatic premium
-      adjustment" moved from a v1 feature to an explicitly deferred later milestone — see
-      <a href="05-whats-next.html">what's next</a>.
+      <strong>Multi-Tenant IC Cloud:</strong> Replaced single-tenant environment variables with an
+      isolated SQLite tenant registry and a rate-limited admin UI/API deployed live at
+      <code>airm-ic.selfserved.ai</code> and <code>central.selfserved.ai/airm-ic/admin</code>.
     </li>
     <li>
-      <strong>The framing itself, corrected.</strong> The original pitch leaned on language like
-      "opaque actuarial scoring." The system's own scoring documentation now opens with the
-      opposite claim on purpose:
+      <strong>Actuarial Loss Engine:</strong> Implemented the isolated <code>pricing/</code> package
+      featuring FAIR Monte Carlo loss simulation and the 75/25 AI-exclusion gap blend with public
+      proxy class data.
+    </li>
+    <li>
+      <strong>Governance Expansion &amp; Tool Adapters:</strong> Expanded catalogs to NIST AI RMF
+      Generative AI Profile, ISO 42001/42005/23894, and OWASP 2025; normalized tool evidence
+      adapters (Promptfoo, DeepEval, Giskard, ART, AIF360, Evidently); and built the offensive
+      testing program schema.
+    </li>
+    <li>
+      <strong>Carrier White-Label Distribution:</strong> Added the display-only branding layer
+      (<code>config.BrandingConfig</code>, <code>GET /api/branding</code>) per Decision 16.
     </li>
   </ul>
-  <blockquote>
-    This is an evidence intake and deterministic screening implementation, not an actuarial
-    model. Scores do not estimate claim frequency, expected loss, premium, legal compliance, or
-    certification.
-  </blockquote>
 
-  <h2>What's next</h2>
-  <p>
-    Google Antigravity (Gemini) is the next tool in the handoff chain, working from the same
-    kind of written record Claude Code left for it. What it's picking up — and what's still
-    honestly unfinished — is the subject of the last piece.
-  </p>
+  <h2>Key architectural lessons learned</h2>
+  <ol>
+    <li>
+      <strong>Dynamic packages require cryptographic supply-chain verification:</strong> You cannot
+      predict telemetry environments in advance, but you can never trust arbitrary code downloads.
+      HMAC-SHA256 manifest signatures and local customer authorization are mandatory.
+    </li>
+    <li>
+      <strong>Credentials must stay in volatile memory:</strong> Telemetry credentials (AWS, Datadog)
+      must live exclusively in container memory and never touch disk, logs, or exports.
+    </li>
+    <li>
+      <strong>Missing evidence must stay unknown:</strong> In risk modeling, unmeasured controls
+      must never default to passing or a midpoint. Missing data lowers coverage, preserving truth.
+    </li>
+    <li>
+      <strong>Durable written records enable zero-loss multi-agent handoffs:</strong> Systematic
+      documentation (<code>PROJECT_STATUS.md</code>, <code>DECISIONS.md</code>, and shared Obsidian
+      knowledge vaults) allowed three different AI harnesses to build a complex distributed system
+      without regressions or stranded knowledge.
+    </li>
+  </ol>
 
   <div class="nav-footer">
     <a href="03-the-scoring-methodology.html">&larr; Back: The scoring methodology</a>

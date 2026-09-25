@@ -17,38 +17,36 @@
   <h1>Apply for beta access</h1>
 
   <p>
-    <strong>What this is:</strong> AIRM is an evidence-based control-screening system for AI
-    production risk — built for the gap opening up between the AI insurance exclusion wave and
-    the total absence of systematic underwriting tooling for it. <strong>What it does:</strong> it
-    checks, with evidence rather than self-attestation, whether real technical and governance
-    defenses exist against ten specific, well-understood AI failure modes — and it's built so
-    your source code, logs, and infrastructure details never leave your perimeter; only a
-    sanitized risk score does. If you want the full story before applying, start with
-    <a href="index.html">the overview</a>.
+    <strong>What this is:</strong> AIRM is an evidence-based AI Risk &amp; Reliability Management
+    platform and continuous telemetry underwriting engine—built to bridge the gap between the
+    AI insurance exclusion wave and the absence of verifiable underwriting tooling.
+    <strong>What it does:</strong> It parses system architecture specifications across 10 formats,
+    requests and cryptographically verifies dynamic HMAC-SHA256 signed telemetry packages from IC Cloud,
+    and runs collectors locally using in-memory credentials. Real technical and governance controls
+    are screened without source code, logs, or credentials ever leaving your perimeter—exporting
+    only sanitized scores that drive closed-loop underwriting rate adjustments. If you want the
+    full architectural detail before applying, start with <a href="index.html">the overview</a>.
   </p>
 
   <p class="lede">
-    This beta is closed source and gated by a short technical application, not an open signup
-    form. There's no scoring rubric published and no partial credit for keyword-matching — we're
-    looking for people who've actually had to make these tradeoffs, not people who can define
-    the terms. Answer as many as you can in your own words, with real specifics from systems
-    you've worked on where relevant. Short, precise answers beat long ones.
+    This beta is closed source and gated by a technical application, not an open signup form.
+    There is no scoring rubric published and no partial credit for keyword-matching—we are looking
+    for engineers who personally operate multi-agent systems and make real architectural tradeoffs.
+    Answer as many questions as you can in your own words with real specifics from systems you operate.
   </p>
 
   <div class="q-block" style="border-color: var(--accent-dim);">
     <span class="q-num">Strict beta eligibility</span>
     <p>
-      This beta is strictly for <strong>non-commercial individuals and personal or community
-      participants</strong> who operate OpenClaw or a comparable personal-agent architecture.
-      Companies, AI-technology firms, insurers, paid enterprise deployments, and every other
-      commercial entity are not eligible. A small personal or community team may be considered
-      only when its participation is genuinely non-commercial; borderline cases are reviewed
-      rather than assumed eligible. Carrier selection is deferred until beta evidence supports
-      considering a later commercial phase. <strong>This is not an offline-only beta:</strong>
-      participation requires a connection to IC Cloud. Because evidence sources differ by
-      environment, IC Cloud dynamically selects and delivers signed telemetry packages or
-      connectors. You authorize and execute the exact package locally; raw telemetry and secrets
-      stay in your environment, and only allowlisted assessment outputs may return to IC Cloud.
+      Alpha and beta participation is strictly limited to <strong>non-commercial individuals and
+      personal or community participants</strong> who operate OpenClaw or comparable personal-agent
+      architectures. Companies, AI-technology vendors, insurers, and commercial entities are not
+      eligible to participate as alpha/beta testers. In parallel, the core platform has been engineered
+      for future carrier-facing distribution under the carrier's own white-label branding (Decision 16).
+      <strong>This is not an offline-only beta:</strong> participants connect an isolated container
+      to IC Cloud to receive cryptographically signed telemetry packages. You authorize and execute
+      the exact package locally; raw telemetry and secrets stay strictly within your environment,
+      and only allowlisted assessment outputs return to IC Cloud.
     </p>
   </div>
 
@@ -106,10 +104,10 @@
   <div class="q-block">
     <span class="q-num">07</span>
     <p><strong>Architecture critique.</strong> This project keeps all raw evidence (code, logs,
-    infra details) inside the assessed company's perimeter and only exports a scores-only JSON
-    to an external party — enforced by a compiled-binary trust boundary plus an allowlist export
-    path. What's the strongest attack or failure mode against that design that we haven't
-    mentioned on this site, and how would you probe for it?</p>
+    cloud credentials) inside the assessed company's perimeter and only exports scores-only JSON
+    to an external party — enforced by a compiled-binary trust boundary, HMAC-SHA256 signature
+    verification, and an allowlist export path. What is the strongest attack or failure mode against
+    that design, and how would you probe for it?</p>
   </div>
 
   <div class="q-block">
@@ -123,16 +121,13 @@
 
   <h2>How to apply</h2>
   <p>
-    Email your answers to <code>beta@selfserved.ai</code> with a short line on what you're
-    currently running for personal or non-commercial community use and your role. We read every application ourselves —
-    no automated screening, no form. Replace this with your real inbox before this page is
-    published.
+    Email your answers to <code>beta@selfserved.ai</code> (or <code>raick@selfserved.ai</code>) with a
+    short description of your personal or community setup and your role. We review every application
+    individually.
   </p>
   <p>
-    <strong>Written or voice — your choice.</strong> Type your answers directly in the email, or
-    record yourself answering and attach the audio file (a voice memo is fine — no particular
-    format required). Whichever mode actually reflects how you think through this stuff is the
-    one we want.
+    <strong>Written or voice — your choice:</strong> Type your answers directly in the email, or
+    attach a clear audio recording / voice memo walking through your thoughts.
   </p>
 
   <div class="nav-footer">

@@ -14,87 +14,92 @@
 
 <main class="wrap">
   <div class="eyebrow">05 &middot; What's next</div>
-  <h1>What's next, and what we deliberately didn't build</h1>
+  <h1>What's next, and what has been completed</h1>
   <p class="lede">
-    This is a beta, not a finished product, and the honest version of that sentence matters
-    more than the marketing version. Here's what's actually still open, and — just as
-    important — what we looked at building and chose not to, at least not yet.
+    AIRM has completed its core engineering phase: containerization, cryptographic dynamic
+    package synthesis, multi-tenant IC Cloud isolation, closed-loop telemetry underwriting,
+    actuarial loss modeling, and white-label branding readiness are all built, verified, and
+    passing automated tests. Here is an honest accounting of what is delivered and the real
+    frontiers ahead.
   </p>
 
-  <h2>Deferred on purpose</h2>
+  <h2>What has been completed &amp; verified</h2>
   <ul>
     <li>
-      <strong>No carrier has been selected.</strong> Carrier selection is deferred until the
-      strictly non-commercial beta produces evidence that supports considering a commercial
-      phase. The beta does not involve insurers or any other commercial participant.
+      <strong>Production containerization &amp; deployment:</strong> Both the Go assessment
+      workbench and Python IC Cloud have multi-stage Dockerfiles with unprivileged user execution,
+      strict filesystem isolation, and production Docker Compose specifications (including
+      <code>docker-compose.secure.yml</code> with automated TLS/mTLS certificate generation).
     </li>
     <li>
-      <strong>No actuarial pricing model.</strong> The system produces control-maturity scores,
-      not premiums, loss estimates, or compliance certifications. Turning scores into pricing is
-      a carrier decision, not something this tool claims to do for them.
+      <strong>End-to-end closed loop proven:</strong> Verified in <code>portal/e2e_test.go</code>:
+      intake of architecture specifications &rarr; dynamic IC Cloud package synthesis with HMAC-SHA256
+      signatures &rarr; bit-for-bit container verification &rarr; local telemetry collection with in-memory
+      credentials &rarr; control screening &rarr; score-only carrier export &rarr; dynamic carrier
+      underwriting rate adjustment (<code>-2.5% premium adjustment</code>).
     </li>
     <li>
-      <strong>No automatic premium adjustment.</strong> An early design called for a 5%
-      risk-score change to automatically trigger a premium adjustment. That's now an explicitly
-      deferred later milestone, not a v1 feature — automating a financial decision off a young
-      scoring model is exactly the kind of shortcut that erodes trust the first time it's wrong.
+      <strong>Multi-tenant carrier backend &amp; admin UI:</strong> IC Cloud features true multi-tenant
+      isolation with per-tenant signing keys and a rate-limited admin UI/API deployed live at
+      <code>airm-ic.selfserved.ai</code> and <code>central.selfserved.ai/airm-ic/admin</code>.
     </li>
     <li>
-      <strong>No production multi-tenant carrier backend.</strong> A development receiver exercises
-      the intake and validation path, but it is not a selected carrier integration. Multi-tenant
-      support and independent books of business belong to a possible later commercial phase, not
-      the beta.
+      <strong>Actuarial loss engine &amp; 75/25 blend:</strong> FAIR-style compound-Poisson / lognormal
+      Monte Carlo simulation (EAL, VaR95, VaR99.5, TVaR99.5) and 75/25 AI-exclusion gap blend with
+      public proxy benchmarks (<code>airisk price</code> and <code>airisk iso-table</code>).
     </li>
     <li>
-      <strong>No OAuth/SSO yet.</strong> Auth is functional for a beta but not yet built out for
-      enterprise identity providers.
+      <strong>Expanded governance &amp; tool adapters:</strong> Catalog expanded to NIST AI RMF
+      Generative AI Profile, ISO 42001/42005/23894, and OWASP 2025; normalized tool evidence adapters
+      for Promptfoo, DeepEval, Giskard, ART, AIF360, and Evidently; and MITRE ATLAS crosswalk.
     </li>
     <li>
-      <strong>IC Cloud telemetry package controls are still being hardened.</strong> The beta is
-      cloud-connected, and IC Cloud must dynamically obtain or install environment-specific
-      telemetry packages because evidence sources are not known in advance. IC Cloud distributes
-      the catalog; participants execute only signed, versioned, locally allowlisted packages after
-      explicit authorization. Package signing, isolation, rollback, and approval/update authority
-      remain required engineering controls, not reasons to assume an offline-only beta.
+      <strong>Offensive testing program schema:</strong> Three-phase governance lifecycle
+      (<code>TestGate</code> &rarr; <code>TestFinding</code> &rarr; <code>TestDisposition</code>)
+      across 10 attack families with closed-state validation.
+    </li>
+    <li>
+      <strong>Carrier white-label distribution layer (Decision 16):</strong> Configurable branding
+      (<code>config.BrandingConfig</code>, <code>GET /api/branding</code>) enabling insurance carriers
+      to distribute the customer container under their own brand.
     </li>
   </ul>
 
-  <h2>The beta requires IC Cloud</h2>
-  <p>
-    Local files and OpenClaw-native evidence can be useful inputs, but they are not the sole
-    baseline. Each participant must connect to IC Cloud so the service can match telemetry
-    packages or hard-data integrations to the participant's actual environment. The participant
-    authorizes and executes them locally so raw telemetry remains local; only allowlisted
-    assessment outputs return. This does not authorize external LLM document handling or pricing.
-  </p>
-
-  <h2>Genuinely open gaps, not deferred by choice</h2>
+  <h2>The real open frontiers</h2>
   <ul>
-    <li>Containerization for both the assessment container and the carrier-side receiver is
-      called for in the requirements and not yet complete.</li>
-    <li>Connector test coverage currently relies on fixtures rather than integration testing
-      against live systems (starting with the GitHub connector).</li>
-    <li>No load testing yet against realistic assessment volume.</li>
-    <li>Governance framework label mapping (specifically <code>mitre_airm</code>) needs a
-      clarification pass against the source framework before it's fully trustworthy.</li>
+    <li>
+      <strong>Licensed ISO/Verisk loss-cost data:</strong> The current actuarial blend uses public
+      Coalition 2024 claims observations as a transparent sector proxy. The next phase will integrate
+      licensed ISO class/loss-cost data with state, policy form, limit, attachment, and trend fields.
+    </li>
+    <li>
+      <strong>Live non-commercial alpha pilot trials:</strong> Evaluating real-world multi-agent,
+      multi-LLM architectures (such as OpenClaw operator swarms) against live operational metrics.
+    </li>
+    <li>
+      <strong>Adversarial execution tooling:</strong> Moving from the verified offensive-testing schema
+      scaffolding to automated execution runners for red-teaming and prompt-injection harnesses.
+    </li>
+    <li>
+      <strong>Enterprise OAuth/SSO integration:</strong> Upgrading local bearer token authentication
+      to enterprise identity provider federations (Okta, Azure AD).
+    </li>
   </ul>
 
-  <h2>Why the beta is gated</h2>
+  <h2>Alpha/beta eligibility boundary</h2>
   <p>
-    This is closed source, and access is gated behind a short technical application rather than
-    an open signup form. Beta participation is strictly limited to non-commercial individuals
-    and, where applicable, small personal or community teams operating OpenClaw or comparable
-    personal-agent architectures. Companies, AI-tech firms, insurers, paid enterprise
-    deployments, and all other commercial entities are excluded. "Small personal or community
-    team" has no approved numeric threshold, so borderline cases are reviewed without expanding
-    eligibility. If you fit that boundary, the application is on the next page.
+    Alpha and beta testing remains strictly limited to non-commercial individuals and eligible personal
+    or community participants operating OpenClaw or comparable personal-agent architectures.
+    Commercial entities, AI vendors, and insurers are excluded from participating as alpha/beta testers.
+    Engineering work on carrier white-label capability prepares the platform for a future commercial
+    phase once alpha evidence is established.
   </p>
 
   <a class="cta" href="../apply.html">Apply for beta access &rarr;</a>
 
   <div class="nav-footer">
     <a href="04-what-we-learned.html">&larr; Back: What we learned</a>
-    <a href="../index.html">&uarr; Back to overview</a>
+    <a href="06-competitive-landscape.html">Next: Competitive landscape &rarr;</a>
   </div>
 </main>
 <footer class="site">AIRM &middot; closed beta</footer>

@@ -15,77 +15,70 @@
 
 <main class="wrap">
   <div class="eyebrow">06 &middot; Competitive landscape</div>
-  <h1>What already exists, and where the gap may be</h1>
+  <h1>What already exists, and where the gap is being closed</h1>
   <p class="lede">
     AIRM is not the first project to apply software and insurance thinking to AI risk. The
-    supplied market analysis points to an active ecosystem of specialist MGAs, governance
-    platforms, carriers, and reinsurers. That makes precise positioning more credible than a
-    "world's first" claim.
+    competitive ecosystem includes specialist MGAs, governance platforms, carriers, and reinsurers.
+    Understanding the field makes precise positioning credible rather than claiming to be the
+    first at everything.
   </p>
 
   <h2>The market is already moving</h2>
   <p>
-    The competitive field spans several different operating models. Armilla AI is described as
-    a specialist underwriting platform pairing algorithmic risk assessment with performance
-    warranties and affirmative liability coverage. Munich Re's aiSure and Mosaic are positioned
-    around technical due diligence and performance guarantees. Holistic AI represents the AI
-    governance and risk-quantification category, mapping controls to frameworks such as the EU
-    AI Act, NIST AI RMF, and ISO 42001. Traditional cyber and technology E&amp;O carriers still
-    commonly treat AI exposure as an extension of existing cyber or professional-negligence
-    underwriting.
+    The competitive field spans several distinct operating models:
   </p>
+  <ul>
+    <li><strong>Armilla AI:</strong> Specialist underwriting platform pairing algorithmic risk assessment with performance warranties and affirmative liability coverage.</li>
+    <li><strong>Munich Re (aiSure) &amp; Mosaic:</strong> Technical due diligence, model performance guarantees, and bespoke reinsurance backing.</li>
+    <li><strong>Holistic AI:</strong> AI governance, compliance audits, and risk-quantification platforms mapping controls to the EU AI Act, NIST AI RMF, and ISO 42001.</li>
+    <li><strong>Traditional Cyber &amp; Tech E&amp;O:</strong> Treating AI exposure as an extension of existing cyber policies, often relying on high deductibles and broad exclusion riders.</li>
+  </ul>
   <p>
-    These are not interchangeable competitors. Some sell assurance or performance cover, some
-    provide governance and compliance tooling, and some provide underwriting capacity. The
-    important point is that AI risk modeling is already a real market, with real institutions and
-    real commercial use cases.
+    These are not interchangeable approaches. Some sell assurance or performance guarantees,
+    some provide governance workflows, and some provide underwriting capacity. The market is real,
+    funded, and active.
   </p>
 
-  <h2>Where current approaches may be thinner</h2>
+  <h2>Where current approaches fall short</h2>
   <ul>
-    <li><strong>Agentic systems.</strong> Many models assess a single model or a narrow ML system;
-      fewer describe the risk of multi-agent workflows, tool execution, loops, cascading failures,
-      and dependencies across several model providers.</li>
-    <li><strong>Continuous runtime evidence.</strong> Point-in-time questionnaires and audits can
-      miss prompt drift, nondeterministic behavior, context degradation, and changes introduced by
-      a vendor after deployment.</li>
-    <li><strong>Local evidence boundaries.</strong> A builder needs a way to test controls without
-      exporting source code, raw logs, credentials, or private operating context. A score is only
-      useful if the evidence boundary is explicit and inspectable.</li>
-    <li><strong>Systemic correlation.</strong> A shared foundation-model outage, poisoning event,
-      or provider change can affect many systems at once. The market analysis identifies the lack
-      of a mature catastrophe-style aggregation model for correlated AI loss as an open question.</li>
-    <li><strong>Technical signals to loss language.</strong> Drift, hallucination, alignment, and
-      control signals eventually need a defensible relationship to expected loss, severity, or
-      reserve decisions. That translation is not solved by producing another point score.</li>
+    <li><strong>Persistent agentic systems:</strong> Most platforms assess a single model endpoint; very few evaluate complex multi-agent swarms, autonomous tool execution, feedback loops, and cascading multi-provider failures.</li>
+    <li><strong>Continuous runtime evidence vs. static questionnaires:</strong> Point-in-time assessments miss prompt drift, nondeterministic behavior, context degradation, and upstream vendor updates.</li>
+    <li><strong>Verifiable local evidence boundaries:</strong> Enterprise engineering teams cannot export proprietary source code, internal logs, or cloud credentials to external SaaS auditors.</li>
+    <li><strong>Translating technical signals into loss language:</strong> Point scores alone do not solve underwriting. Underwriters need expected annual loss (EAL), Value at Risk (VaR), and quantifiable rate adjustments.</li>
   </ul>
 
-  <h2>AIRM's potential angle</h2>
+  <h2>AIRM's architectural answer</h2>
   <p>
-    The beta explores a narrower proposition: can a participant run signed, environment-specific
-    telemetry packages inside an aglet container, keep raw evidence and scoring local, and return
-    only allowlisted assessment outputs? The target systems are complex, persistent, multi-agent
-    architectures—not just a single model endpoint.
+    AIRM directly addresses these gaps through an integrated technical architecture:
   </p>
+  <div class="stat-row">
+    <div class="stat"><span class="num">100%</span><span class="label">Local Credential Containment</span></div>
+    <div class="stat"><span class="num">HMAC-SHA256</span><span class="label">Cryptographically Signed Packages</span></div>
+    <div class="stat"><span class="num">Closed-Loop</span><span class="label">Telemetry to Rate Adjustment</span></div>
+  </div>
   <p>
-    That is a hypothesis, not a market-share claim or an actuarial result. The beta does not set
-    premiums, certify compliance, estimate loss distributions, or select a carrier. It is intended
-    to test whether the evidence boundary and control-screening method are useful enough to support
-    a later commercial or actuarial phase.
+    AIRM combines:
   </p>
+  <ol>
+    <li><strong>Multi-Format Architecture Intake:</strong> Ingesting 10 system specification formats to automatically detect AI components and specify telemetry needs.</li>
+    <li><strong>Cryptographic Dynamic Packaging:</strong> Delivering HMAC-SHA256 signed, environment-tailored telemetry packages from IC Cloud, verified bit-for-bit before local execution.</li>
+    <li><strong>In-Memory Credential Safety:</strong> Running collectors locally where cloud credentials never touch disk or egress to the network.</li>
+    <li><strong>Closed-Loop Telemetry Underwriting:</strong> Translating verified control screening into score-only exports that trigger dynamic carrier rate adjustments (e.g. <code>-2.5% premium adjustment</code>).</li>
+    <li><strong>Actuarial Loss Modeling:</strong> FAIR-style Monte Carlo loss simulation and 75/25 AI-exclusion gap pricing based on empirical claims proxies.</li>
+    <li><strong>Carrier White-Label Enablement (Decision 16):</strong> Allowing insurance carriers to distribute customer containers under their own branding.</li>
+  </ol>
 
-  <h2>What this means for the beta</h2>
+  <h2>What this means for the alpha/beta</h2>
   <p>
-    We are looking for individual peer builders who personally operate a company-in-a-box,
-    persistent agent swarm, or comparable multi-surface system. Their practical constraints are
-    the test: what can be measured locally, what must remain private, how failures cascade, and
-    which controls are real rather than merely documented.
+    We are actively engaging individual peer builders who operate complex, persistent agent swarms
+    (such as OpenClaw operator architectures). Their feedback under real operating constraints verifies
+    the local telemetry boundary, catches edge-case failures, and ensures the scoring model reflects
+    actual technical resilience.
   </p>
 
   <p class="voice-state">
     Source: <a href="https://docs.google.com/document/d/1qyUcY-6AR8hPFAjh0c_V_p6BEA5B2948Mw5Ks8dXv4A/edit" rel="noopener">AI Risk Insurance Modeling: Competitive Analysis &amp; Market Gap</a>.
-    This public summary is a working market map, not independent diligence or an endorsement of
-    any named organization.
+    This public summary provides a working market map and does not constitute endorsement of any named entity.
   </p>
 
   <a class="cta" href="../apply.html">Apply for beta access &rarr;</a>
